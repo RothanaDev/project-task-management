@@ -32,6 +32,17 @@
       "tasksTotal": 36,
       "tasksCompleted": 20,
       "dueDate": "2025-04-30"
+    },
+    {
+      "id": "4",
+      "slug": "Digital Marketing",
+      "name": "Digital Marketing",
+      "description": "Digital marketing initiatives and campaign management.",
+      "color": "bg-purple-500",
+      "status": "Completed",
+      "tasksTotal": 36,
+      "tasksCompleted": 20,
+      "dueDate": "2025-04-30"
     }
   ],
   "tasks": [
@@ -46,10 +57,18 @@
       "tags": ["design", "accessibility"],
       "assignee": "yeourn kimsan",
       "subtasks": [
-        { "id": "1", "title": "Audit current design tokens", "completed": true },
+        {
+          "id": "1",
+          "title": "Audit current design tokens",
+          "completed": true
+        },
         { "id": "2", "title": "Create new color palette", "completed": true },
         { "id": "3", "title": "Update typography scale", "completed": false },
-        { "id": "4", "title": "Document component variants", "completed": false }
+        {
+          "id": "4",
+          "title": "Document component variants",
+          "completed": false
+        }
       ],
       "comments": [
         {

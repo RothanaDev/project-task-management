@@ -3,7 +3,10 @@ import React from "react";
 import { fetchProjects, fetchTasks } from "@/lib/api";
 import { BellRing } from "lucide-react";
 import Link from "next/link";
-
+import RecentlyTasks from "./components/recentlytasks";
+import RecentlyProjects from "./components/recentlyprojects";
+import TaskSummary from "./components/TaskSummary";
+import ProjectSummary from "./components/ProjectSummary";
 
 export default async function DashboardPage() {
   const tasks = await fetchTasks();
@@ -26,6 +29,19 @@ export default async function DashboardPage() {
               New Task
             </button>
           </Link>
+        </div>
+      </div>
+      <div className="px-10 pt-2">
+        <div className="mb-6 grid grid-cols-1 md:grid-cols-2 gap-6 items-center shadow p-10 rounded-md">
+          <ProjectSummary projects={projects} />
+          <TaskSummary tasks={tasks} />
+        </div>
+
+        <div>
+          <RecentlyTasks tasks={tasks} />
+        </div>
+        <div className="mt-5">
+          <RecentlyProjects projects={projects} />
         </div>
       </div>
     </main>
