@@ -19,4 +19,4 @@ pnpm run server
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-Open [http://localhost:3001](http://localhost:3001) with your browser to see the enpoint api.
+Open [http://localhost:3001](http://localhost:3001) with your browser to see the endpoint api.
