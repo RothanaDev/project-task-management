@@ -32,17 +32,6 @@
       "tasksTotal": 36,
       "tasksCompleted": 20,
       "dueDate": "2025-04-30"
-    },
-    {
-      "id": "4",
-      "slug": "Digital Marketing",
-      "name": "Digital Marketing",
-      "description": "Digital marketing initiatives and campaign management.",
-      "color": "bg-purple-500",
-      "status": "Completed",
-      "tasksTotal": 36,
-      "tasksCompleted": 20,
-      "dueDate": "2025-04-30"
     }
   ],
   "tasks": [

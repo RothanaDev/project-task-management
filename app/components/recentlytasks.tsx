@@ -24,38 +24,43 @@ const statusStyle: Record<string, string> = {
 export default function RecentlyTasks({ tasks }: { tasks: Task[] }) {
   return (
     <div>
-      <div className="justify-center items-center flex flex-col px-10 mb-5 text-gray-600">
-        <h2 className="text-xl font-bold mb-1">Recent Tasks</h2>
-        <a href="./tasks" className="hover:text-blue-600 font-bold flex">
-          View All <span><ChevronRight /></span>
-        </a>
-      </div>
       <Card className="px-10">
-        <ul className="space-y-2">
-          {tasks.slice(0, 5).map((task) => (
-            <li
-              key={task.id}
-              className="border-b border-b-gray-300 pb-4 last:border-b-0"
-            >
-              <div className="flex items-baseline justify-around">
-                <input type="checkbox" />
-                <CardHeader>#{task.id}</CardHeader>
-                <CardTitle className="flex-1">{task.title}</CardTitle>
-                <span
-                  className={`text-sm px-3 py-1 rounded-full ${
-                    statusStyle[task.status]
-                  }`}
-                >
-                  {task.status}
-                </span>
-              </div>
-              <div className="justify-between items-baseline flex">
-                <CardDescription>{task.description}</CardDescription>
-                <span>{task.dueDate}</span>
-              </div>
-            </li>
-          ))}
-        </ul>
+        <div className="justify-center items-center flex flex-col px-10 text-gray-600">
+          <h2 className="text-xl font-bold mb-1">Recent Tasks</h2>
+          <a href="./tasks" className="hover:text-blue-600 font-bold flex">
+            View All{" "}
+            <span>
+              <ChevronRight />
+            </span>
+          </a>
+        </div>
+        <div>
+          <ul className="space-y-2 sm:space-y-4">
+            {tasks.slice(0, 5).map((task) => (
+              <li
+                key={task.id}
+                className="border p-4 rounded-lg"
+              >
+                <div className="flex items-baseline justify-around">
+                  <input type="checkbox" />
+                  <CardHeader>#{task.id}</CardHeader>
+                  <CardTitle className="flex-1">{task.title}</CardTitle>
+                  <span
+                    className={`text-sm px-3 py-1 rounded-lg ${
+                      statusStyle[task.status]
+                    }`}
+                  >
+                    {task.status}
+                  </span>
+                </div>
+                <div className="justify-between items-baseline flex">
+                  <CardDescription>{task.description}</CardDescription>
+                  <span>{task.dueDate}</span>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
       </Card>
     </div>
   );
