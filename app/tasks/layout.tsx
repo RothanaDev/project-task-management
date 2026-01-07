@@ -31,36 +31,28 @@ export default function Layout({
 
   return (
     <div className="w-full">
-      <div className="flex w-full flex-col gap-2 border-b">
-        <Item className="h-18 py-1 px-4">
-          <ItemContent className="">
-            <ItemTitle className="text-xl font-bold">Tasks</ItemTitle>
-            {isLoading ? (
-              <Skeleton className="w-17.5 h-7" />
-            ) : (
-              <ItemDescription className="text-sm">
-                {data.length} totals tasks
-              </ItemDescription>
-            )}
-          </ItemContent>
-          <ItemContent className=" flex flex-row justify-center items-center gap-3 mr-4">
+      <header className="bg-white border-b border-gray-200 px-8 py-2 fixed top-0 left-64 right-0 z-50">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900">Tasks</h1>
+            <p className="text-sm text-gray-500 mt-1">
+              {data.length} tasks
+            </p>
+          </div>
+          <div className="flex items-center gap-3">
             <Button variant="ghost" size="icon">
               <Bell className="w-5 h-5" />
             </Button>
-            <ItemActions className="">
-              {/* Drawer */}
-              <Link
-                href={"/tasks/new"}
-                className="py-2 px-4  cursor-pointer flex items-center gap-1 hover:bg-opacity-80 hover:text-gray-300 rounded bg-black text-white"
-              >
-                <Plus className="inline mr-2" />
-                New Task
-              </Link>
-              {/* <DrawerAddNewTask /> */}
-            </ItemActions>
-          </ItemContent>
-        </Item>
-      </div>
+            <Link
+              href={"/tasks/new"}
+              className="py-2 px-4  cursor-pointer flex items-center gap-1 hover:bg-opacity-80 hover:text-gray-300 rounded bg-black text-white"
+            >
+              <Plus className="inline mr-2" />
+              New Task
+            </Link>
+          </div>
+        </div>
+      </header>
       <div className="p-6 flex flex-col w-full ">{children}</div>
     </div>
   );
