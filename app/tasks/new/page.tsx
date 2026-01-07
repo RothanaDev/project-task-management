@@ -1,5 +1,11 @@
-export default function CreateTaskPage(){
+import { BreadcrumbNewTask } from "../components/Breadcrumb-New-Task";
+import { CreateNewTask } from "../components/Create-New-Task";
+
+export default function CreateTaskPage() {
     return (
-        <h1> Create New Task Page </h1>
+        <>
+            <BreadcrumbNewTask/>
+            <CreateNewTask />
+        </>
     )
 }
