@@ -112,12 +112,12 @@ export default function CreateTaskPage() {
   };
 
   return (
-    <div className="container mx-auto py-8 max-w-4xl">
-      <Card className="w-full">
+    <div className="w-full">
+      <Card>
         <CardHeader>
           <CardTitle className="text-2xl">Create New Task</CardTitle>
         </CardHeader>
-        <Separator className="mb-4" />
+        <Separator />
         <CardContent>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -151,7 +151,7 @@ export default function CreateTaskPage() {
                           onValueChange={field.onChange}
                           value={field.value}
                         >
-                          <FormControl>
+                          <FormControl className="w-full">
                             <SelectTrigger>
                               <SelectValue placeholder="Select a project" />
                             </SelectTrigger>
@@ -217,7 +217,7 @@ export default function CreateTaskPage() {
                           onValueChange={field.onChange}
                           value={field.value}
                         >
-                          <FormControl>
+                          <FormControl className="w-full">
                             <SelectTrigger>
                               <SelectValue placeholder="Select status" />
                             </SelectTrigger>
@@ -246,7 +246,7 @@ export default function CreateTaskPage() {
                           onValueChange={field.onChange}
                           value={field.value}
                         >
-                          <FormControl>
+                          <FormControl className="w-full">
                             <SelectTrigger>
                               <SelectValue placeholder="Select priority" />
                             </SelectTrigger>
@@ -314,63 +314,62 @@ export default function CreateTaskPage() {
               </div>
 
               <Separator />
-
-              {/* Tags */}
-              <div className="space-y-4">
-                <h3 className="text-lg font-semibold">Tags</h3>
-                <div className="flex flex-wrap gap-2">
-                  {presetTags.map((tag) => {
-                    const currentTags = form.watch("tags");
-                    const isSelected = currentTags.includes(tag.id);
-                    return (
-                      <Badge
-                        key={tag.id}
-                        variant={isSelected ? "default" : "outline"}
-                        className="cursor-pointer hover:opacity-80 transition-opacity"
-                        onClick={() => handleTagToggle(tag.id)}
-                      >
-                        {tag.label}
-                      </Badge>
-                    );
-                  })}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Tags */}
+                <div className="space-y-4">
+                  <h3 className="text-lg font-semibold">Tags</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {presetTags.map((tag) => {
+                      const currentTags = form.watch("tags");
+                      const isSelected = currentTags.includes(tag.id);
+                      return (
+                        <Badge
+                          key={tag.id}
+                          variant={isSelected ? "default" : "outline"}
+                          className="cursor-pointer hover:opacity-80 transition-opacity"
+                          onClick={() => handleTagToggle(tag.id)}
+                        >
+                          {tag.label}
+                        </Badge>
+                      );
+                    })}
+                  </div>
+                  <div className="text-sm text-gray-500">
+                    Please Click tags to select
+                  </div>
                 </div>
-                <div className="text-sm text-gray-500">
-                  Please Click tags to select
+
+                {/* Assignee */}
+                <div className="space-y-4">
+                  <h3 className="text-lg font-semibold">Assignee</h3>
+                  <FormField
+                    control={form.control}
+                    name="assignee"
+                    render={({ field }) => (
+                      <FormItem>
+                        <Select
+                          onValueChange={field.onChange}
+                          value={field.value}
+                        >
+                          <FormControl className="w-full">
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select an assignee" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {/* FIXED: Remove the empty value SelectItem */}
+                            {presetAssignees.map((assignee) => (
+                              <SelectItem key={assignee.id} value={assignee.id}>
+                                {assignee.label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                 </div>
-              </div>
-
-              <Separator />
-
-              {/* Assignee */}
-              <div className="space-y-4">
-                <h3 className="text-lg font-semibold">Assignee</h3>
-                <FormField
-                  control={form.control}
-                  name="assignee"
-                  render={({ field }) => (
-                    <FormItem>
-                      <Select
-                        onValueChange={field.onChange}
-                        value={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select an assignee" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {/* FIXED: Remove the empty value SelectItem */}
-                          {presetAssignees.map((assignee) => (
-                            <SelectItem key={assignee.id} value={assignee.id}>
-                              {assignee.label}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
               </div>
 
               <Separator />
