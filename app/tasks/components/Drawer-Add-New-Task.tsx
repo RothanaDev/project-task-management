@@ -157,7 +157,7 @@ export function DrawerAddNewTask() {
                                 </div>
                                 <div className="">
                                     {/* Due Date */}
-                                    <DueDate />
+                                    {/* <DueDate /> */}
                                 </div>
                                 <div className="flex flex-col gap-2">
                                     <Label  className="">Tags</Label>

@@ -15,7 +15,7 @@ const items = [
     },
     {
         name: "In Process",
-        url: "in-process"
+        url: "in-progress"
     },
     {
         name: "Done",
@@ -31,12 +31,12 @@ export default function TasksPage() {
     const [status, setStatus] = useState<StatusProp>({ name: "All", url: "all" });
     const [search, setSearch] = useState<string>("");
 
-    if(isLoading)return <SkeletonLoading/>
+    if (isLoading) return <SkeletonLoading />
 
     return (
         <div>
             <SortingGroup sorting={items} status={status} setSearch={setSearch} setStatus={setStatus} />
-            <TableContent search={search} tasks={data} status={status}  />
+            <TableContent search={search} tasks={data} status={status} />
         </div>
     );
 }

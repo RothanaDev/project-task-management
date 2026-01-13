@@ -52,8 +52,8 @@ export default function Subtask({ subtasks }: SubtaskProps) {
                             </Badge>
                         </CardAction>
                         {
-                            subtasks?.map((sTask) => (
-                                <SubtaskItems key={sTask.id} getSubtask={sTask} />
+                            subtasks?.map((sTask,idx) => (
+                                <SubtaskItems key={sTask.id+idx} getSubtask={sTask} />
                             ))
                         }
                     </div>
