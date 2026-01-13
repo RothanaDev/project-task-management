@@ -25,32 +25,42 @@ function formatDate(date: Date | undefined) {
         year: "numeric",
     })
 }
+interface DueDateProps {
+    value?: Date
+    onChange: (date?: Date) => void,
+}
 
-export function DueDate() {
+export function DueDate({ value, onChange }: DueDateProps) {
     const [open, setOpen] = React.useState(false)
-    const [value, setValue] = React.useState("In 2 days")
-    const [date, setDate] = React.useState<Date | undefined>(
-        parseDate(value) || undefined
+    const [month, setMonth] = React.useState<Date | undefined>(value)
+    const [inputValue, setInputValue] = React.useState(
+        value ? formatDate(value) : ""
     )
-    const [month, setMonth] = React.useState<Date | undefined>(date)
+
+
+    React.useEffect(() => {
+        setInputValue(value ? formatDate(value) : "")
+        setMonth(value)
+    }, [value])
+
+
 
     return (
         <div className="flex flex-col gap-2">
-            <Label htmlFor="date" className="">
-                Due Date
-            </Label>
-            <div className="relative flex gap-2">
+            <Label htmlFor="date">Due Date</Label>
+
+            <div className="relative  flex gap-2">
                 <Input
                     id="date"
-                    value={value}
+                    value={inputValue}
                     placeholder="Tomorrow or next week"
                     className="bg-background pr-10"
                     onChange={(e) => {
-                        setValue(e.target.value)
-                        const date = parseDate(e.target.value)
-                        if (date) {
-                            setDate(date)
-                            setMonth(date)
+                        setInputValue(e.target.value)
+                        const parsed = parseDate(e.target.value)
+                        if (parsed) {
+                            onChange(parsed)
+                            setMonth(parsed)
                         }
                     }}
                     onKeyDown={(e) => {
@@ -60,37 +70,37 @@ export function DueDate() {
                         }
                     }}
                 />
+
                 <Popover open={open} onOpenChange={setOpen}>
                     <PopoverTrigger asChild>
                         <Button
-                            id="date-picker"
                             variant="ghost"
                             className="absolute top-1/2 right-2 size-6 -translate-y-1/2"
                         >
                             <CalendarIcon className="size-3.5" />
-                            <span className="sr-only">Select date</span>
                         </Button>
                     </PopoverTrigger>
-                    <PopoverContent className="w-auto overflow-hidden p-0" align="end">
+
+                    <PopoverContent className="w-auto p-0" align="end">
                         <Calendar
                             mode="single"
-                            selected={date}
-                            captionLayout="dropdown"
+                            selected={value}
                             month={month}
                             onMonthChange={setMonth}
                             onSelect={(date) => {
-                                setDate(date)
-                                setValue(formatDate(date))
+                                onChange(date)
+                                setInputValue(formatDate(date))
                                 setOpen(false)
                             }}
                         />
                     </PopoverContent>
                 </Popover>
             </div>
-            <div className="text-muted-foreground px-1 text-sm">
+
+            <p className="text-muted-foreground px-1 text-sm">
                 This will be expired on{" "}
-                <span className="font-medium">{formatDate(date)}</span>.
-            </div>
+                <span className="font-medium">{formatDate(value)}</span>.
+            </p>
         </div>
     )
 }

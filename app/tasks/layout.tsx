@@ -12,6 +12,7 @@ import Link from "next/link";
 import { EmptyTable } from "./components/Empty-Table";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
+import { Toaster } from "@/components/ui/sonner";
 
 export default function Layout({
   children,
@@ -54,6 +55,7 @@ export default function Layout({
         </div>
       </header>
       <div className="p-6 flex flex-col w-full pt-25">{children}</div>
+      <Toaster/>
     </div>
   );
 }

@@ -37,10 +37,12 @@ export function ActionBtnRedirect({ id }: childProps) {
               <DropdownMenuShortcut>⇧⌘V</DropdownMenuShortcut>
             </DropdownMenuItem>
           </Link>
-          <DropdownMenuItem>
-            Edit
-            <DropdownMenuShortcut>⌘E</DropdownMenuShortcut>
-          </DropdownMenuItem>
+          <Link href={`/tasks/edit/${id}`}>
+            <DropdownMenuItem>
+              Edit
+              <DropdownMenuShortcut>⌘E</DropdownMenuShortcut>
+            </DropdownMenuItem>
+          </Link>
         </DropdownMenuGroup>
 
         <DropdownMenuSeparator />

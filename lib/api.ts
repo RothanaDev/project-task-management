@@ -1,13 +1,14 @@
 const API_BASE_URL = "http://localhost:3001"
 import type { TaskFormValues } from "@/lib/validators/task"
 import { Subtask } from "./types"
+import { TaskUpdateFormValues } from "./validators/taskUpdateSchema"
 
 export async function fetchProjects() {
   const response = await fetch(`${API_BASE_URL}/projects`)
   if (!response.ok) throw new Error("Failed to fetch projects")
   return response.json()
 }
- 
+
 export async function fetchProject(id: string) {
   const response = await fetch(`${API_BASE_URL}/projects/${id}`)
   if (!response.ok) throw new Error("Project not found")
@@ -64,7 +65,11 @@ export async function createTask(data: TaskFormValues) {
   return res.json()
 }
 
-export async function updateTask(id: string, data: TaskFormValues) {
+type TaskUpdateApiPayload = Omit<TaskUpdateFormValues, 'dueDate'> & {
+  dueDate?: string;   // or string | null if your backend wants null
+};
+
+export async function updateTask(id: string, data: TaskUpdateApiPayload) {
   const res = await fetch(`${API_BASE_URL}/tasks/${id}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },

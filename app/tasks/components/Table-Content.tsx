@@ -52,8 +52,6 @@ export function TableContent({
 
         }
 
-
-
         return rs;
     }
 
@@ -177,7 +175,7 @@ export function TableContent({
                                                     <MessageSquareText size={18} className="text-gray-600" />
                                                     <span className="absolute top-1.5 -right-3 flex items-center justify-center text-xs bg-white/10 backdrop-blur-sm  border border-gray-300 text-gray-800 w-5 h-5 rounded-full">
                                                         {
-                                                            task.comments.length
+                                                            task?.comments?.length
                                                         }
                                                     </span>
                                                 </div>

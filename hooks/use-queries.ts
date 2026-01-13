@@ -19,7 +19,7 @@ export function useProjects() {
    })
 
    return { data, isLoading, error }
-} 
+}
 
 export function useProject(id: string) {
    const {
@@ -30,9 +30,9 @@ export function useProject(id: string) {
     queryKey: ["project", id],
     queryFn: () => api.fetchProject(id),
     enabled: !!id,
-   })   
+   })
     return { data, isLoading, error }
-} 
+}
 
 export function useTasks(){
     const {
@@ -44,7 +44,7 @@ export function useTasks(){
     queryFn: api.fetchTasks,
     })
     return { data, isLoading, error }
-} 
+}
 export function useTask(id: string) {
    const {
     data,
@@ -53,10 +53,10 @@ export function useTask(id: string) {
    }  = useQuery<Task | undefined>({
     queryKey: ["task", id],
     queryFn: () => api.fetchTask(id),
-    enabled: !!id,
-   })   
+    enabled: !!id.trim(),
+   })
     return { data, isLoading, error }
-} 
+}
 export function useTasksByProject(projectId: string) {
     const {
         data= [] as Task[],
@@ -103,7 +103,7 @@ export function useUpdateTask(id: string) {
 }
 export function useDeleteTask() {
     const queryClient = useQueryClient()
-    
+
     return useMutation({
         mutationFn: (id: string) => api.deleteTask(id),
         onSuccess: () => {
