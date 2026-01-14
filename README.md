@@ -14,6 +14,8 @@
 - **Data Fetching:** tanstack
 - **Backend:** JSON Server (mock API)
 - **Date Handling:** date-fns
+- **sweetalert2:** used for alert
+- **Lucide:** used for icon
 
 ## Features
 
@@ -22,8 +24,9 @@
 2. **Tasks List** (`/tasks`) - Filterable task view with status filters
 3. **Task Detail** (`/tasks/[id]`) - Detailed task view with subtasks and comments
 4. **Create Task** (`/tasks/new`) - Form to create new tasks
-5. **Projects List** (`/projects`) - Grid view of all projects with progress
-6. **Project Detail** (`/projects/[id]`) - Project overview with task list
+5. **Edit Task** (`/tasks/edit/[id]`) - Form to edit task
+6. **Projects List** (`/projects`) - Grid view of all projects with progress
+7. **Project Detail** (`/projects/[id]`) - Project overview with task list
 
 
 
