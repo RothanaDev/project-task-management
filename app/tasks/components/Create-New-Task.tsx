@@ -92,17 +92,14 @@ export default function CreateTaskPage() {
   });
 
   const onSubmit = async (data: TaskFormValues) => {
-
-      try {
-        await createTaskMutation.mutateAsync(data);
-        Swal.fire("Success!", "Your task has been created.", "success");
-        router.push("/tasks");
-      } catch (error) {
-        console.error("Failed to create task:", error);
-        Swal.fire("Error", "Failed to create task.", "error");
-      }
-    
-    createTaskMutation.mutate(data);
+    try {
+      await createTaskMutation.mutateAsync(data);
+      Swal.fire("Success!", "Your task has been created.", "success");
+      router.push("/tasks");
+    } catch (error) {
+      console.error("Failed to create task:", error);
+      Swal.fire("Error", "Failed to create task.", "error");
+    }
   };
 
   const handleAddSubtask = () => {
@@ -455,7 +452,7 @@ export default function CreateTaskPage() {
             <Link href="/tasks">Cancel</Link>
           </Button>
           <Button
-            type="submit"
+            // type="submit"
             onClick={form.handleSubmit(onSubmit)}
             disabled={createTaskMutation.isPending}
           >
