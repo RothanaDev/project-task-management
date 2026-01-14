@@ -57,7 +57,7 @@ export function TableContent({ tasks, status, search }: TaskProps) {
                 <TableHead className="w-12 text-center p-3">
                   <div className="flex items-center gap-6">
                     <span className=" border p-1 rounded-full">
-                      <Check size={12} className="text-white" />
+                      <Check size={10} className="text-white" />  
                     </span>
                   </div>
                 </TableHead>
@@ -68,18 +68,15 @@ export function TableContent({ tasks, status, search }: TaskProps) {
                   Title
                 </TableHead>
                 <TableHead className="font-bold text-center min-w-37.5 p-3">
-                  Description
-                </TableHead>
-                <TableHead className="font-bold text-center min-w-37.5 p-3">
                   Project Name
                 </TableHead>
-                <TableHead className="font-bold text-center min-w-30 p-3">
+                <TableHead className="font-bold text-center min-w-10 p-3">
                   Status
                 </TableHead>
-                <TableHead className="font-bold text-center min-w-30 p-3">
+                <TableHead className="font-bold text-center min-w-10 p-3">
                   Priority
                 </TableHead>
-                <TableHead className="font-bold text-center w-24 p-3">
+                <TableHead className="font-bold text-center w-20 p-3">
                   Comments
                 </TableHead>
                 <TableHead className="font-bold text-center w-24 p-3">
@@ -93,23 +90,23 @@ export function TableContent({ tasks, status, search }: TaskProps) {
             <TableBody>
               {filteredTasks.map((task) => (
                 <TableRow key={task.id} className="hover:bg-gray-50">
-                  <TableCell className="text-center p-3">
+                  <TableCell className="text-center py-3 px-3">
                     <div className="flex items-center gap-6">
                       {task.status === "done" && (
                         <span className="bg-blue-500 border border-blue-500 p-1 rounded-full">
-                          <Check size={12} className="text-white" />
+                          <Check size={10} className="text-white" />
                         </span>
                       )}
                       {task.status !== "done" && (
                         <span className=" border p-1 rounded-full">
-                          <Check size={12} className="text-white" />
+                          <Check size={10} className="text-white" />
                         </span>
                       )}
                     </div>
                     {/* <Checkbox disabled checked={task.status === 'done'} id={`checkbox`} /> */}
                   </TableCell>
 
-                  <TableCell className="font-medium p-3 flex items-center gap-2">
+                  <TableCell className="font-medium py-3 flex items-center gap-2">
                     <Avatar className="">
                       <AvatarImage
                         src="https://github.com/shadcn.png"
@@ -119,18 +116,15 @@ export function TableContent({ tasks, status, search }: TaskProps) {
                     </Avatar>
                     <span>{task.assignee}</span>
                   </TableCell>
-                  <TableCell className="text-center font-medium p-3">
+                  <TableCell className="text-center font-medium p-1">
                     {task.title}
                   </TableCell>
-                  <TableCell className="text-center p-3 max-w-60 truncate">
-                    {task.description}
-                  </TableCell>
-                  <TableCell className="text-center p-3 max-w-60 truncate">
+                  <TableCell className="text-center py-3 max-w-60 truncate">
                     {projectName(task.projectId)}
                   </TableCell>
 
                   {/* Status Cell */}
-                  <TableCell className="text-center p-3">
+                  <TableCell className="text-center py-3">
                     <div className="inline-flex justify-center">
                       <span
                         className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs ${
@@ -156,7 +150,7 @@ export function TableContent({ tasks, status, search }: TaskProps) {
                   </TableCell>
 
                   {/* Priority Cell */}
-                  <TableCell className="text-center p-3">
+                  <TableCell className="text-center py-3">
                     <div className="inline-flex justify-center">
                       <span
                         className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs ${
@@ -182,7 +176,7 @@ export function TableContent({ tasks, status, search }: TaskProps) {
                   </TableCell>
 
                   {/* Comments Cell */}
-                  <TableCell className="text-center p-3 ">
+                  <TableCell className="text-center py-3">
                     <div className="flex justify-center items-center">
                       <div className="relative cursor-pointer">
                         <MessageSquareText
@@ -195,7 +189,7 @@ export function TableContent({ tasks, status, search }: TaskProps) {
                       </div>
                     </div>
                   </TableCell>
-                  <TableCell className="text-center p-3 ">
+                  <TableCell className="text-center py-3">
                     <div className="flex justify-center items-center">
                       <div className="flex flex-col items-center justify-center gap-0.5 cursor-pointer">
                         <Calendar size={18} className="text-gray-600" />
@@ -208,7 +202,7 @@ export function TableContent({ tasks, status, search }: TaskProps) {
                     </div>
                   </TableCell>
 
-                  <TableCell className="text-center font-medium p-3">
+                  <TableCell className="text-center font-medium py-3">
                     <ActionBtnRedirect id={task.id} />
                   </TableCell>
                 </TableRow>

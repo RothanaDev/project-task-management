@@ -36,27 +36,6 @@
   ],
   "tasks": [
     {
-      "title": "Testing",
-      "description": "hello team",
-      "projectId": "3",
-      "priority": "low",
-      "status": "done",
-      "dueDate": "2026-01-29T17:00:00.000Z",
-      "tags": [
-        "accessibility",
-        "design"
-      ],
-      "assignee": "chory-chanrady",
-      "subtasks": [
-        {
-          "title": "Hello  subtask",
-          "completed": false
-        }
-      ],
-      "comments": [],
-      "id": "3bdc"
-    },
-    {
       "title": "testing-update",
       "description": "Hello Test",
       "projectId": "3",
@@ -126,7 +105,7 @@
       "title": "Accusamus ad non qui",
       "description": "Aut dolore accusanti",
       "projectId": "1",
-      "priority": "high",
+      "priority": "low",
       "status": "done",
       "dueDate": "2026-01-14T13:50:25.223Z",
       "tags": [
@@ -146,7 +125,7 @@
       "status": "todo",
       "dueDate": "2026-01-14T13:59:28.890Z",
       "tags": [],
-      "assignee": "so-bunleng",
+      "assignee": "chory-chanrady",
       "subtasks": [
         {
           "title": "Task 1",
@@ -163,58 +142,6 @@
       ],
       "comments": [],
       "id": "2858"
-    },
-    {
-      "title": "Testing",
-      "description": "Testing Task",
-      "projectId": "2",
-      "priority": "medium",
-      "status": "todo",
-      "dueDate": "2026-01-14T15:05:25.279Z",
-      "tags": [
-        "design",
-        "feature",
-        "urgent"
-      ],
-      "assignee": "chory-chanrady",
-      "subtasks": [
-        {
-          "title": "Task 1",
-          "completed": false
-        },
-        {
-          "title": "Task 2",
-          "completed": false
-        },
-        {
-          "title": "Task 3",
-          "completed": true
-        }
-      ],
-      "comments": [],
-      "id": "bd74"
-    },
-    {
-      "title": "Aut ut blanditiis al",
-      "description": "Qui quibusdam a ea n",
-      "projectId": "2",
-      "priority": "low",
-      "status": "todo",
-      "dueDate": "2026-01-14T15:31:29.339Z",
-      "tags": [],
-      "assignee": "so-bunleng",
-      "subtasks": [
-        {
-          "title": "Task 1",
-          "completed": false
-        },
-        {
-          "title": "Task 2",
-          "completed": false
-        }
-      ],
-      "comments": [],
-      "id": "09df"
     }
   ]
 }
