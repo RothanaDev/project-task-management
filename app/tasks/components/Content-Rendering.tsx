@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import Subtask from "./Subtask";
 import Comment from "./Comment";
 import SortingComponent from "./Sorting";
-import { useTask } from "@/hooks/use-queries";
+import { useProjects, useTask } from "@/hooks/use-queries";
 import {
   Item,
   ItemContent,
@@ -18,12 +18,15 @@ import {
   User,
   UserRoundPlus,
   Trash2,
+  FolderGit,
+  Settings2,
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { BreadcrumbTask } from "./Breadcrumb-Task";
 import SkeletonTaskDetail from "./SkeletonTaskDetail";
 import { useHandleDeleteTask } from "./HandleDeleteTask";
-import Swal from "sweetalert2";
+import { EditTask } from "./Edit-Task";
+import Link from "next/link";
 type ChildrenProps = {
   id: string;
 };
@@ -49,7 +52,11 @@ export default function ContentRendering({ id }: ChildrenProps) {
     url: "subtask",
   });
   const { data, isLoading, error } = useTask(id);
+  const { data: projects } = useProjects();
   const { handleDelete, isPending } = useHandleDeleteTask();
+  const projectName = projects.find(
+    (project) => project.id === data?.projectId
+  )?.name;
   // if(isLoading)return <div>Loading...</div>
   if (isLoading) return <SkeletonTaskDetail />;
 
@@ -60,14 +67,19 @@ export default function ContentRendering({ id }: ChildrenProps) {
         <ItemContent className="">
           <div className="flex items-center justify-between">
             <ItemTitle className="text-xl font-bold">{data?.title}</ItemTitle>
-            <button
-              onClick={() => handleDelete(id)}
-              disabled={isPending}
-              className="p-2 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-              title="Delete task"
-            >
-              <Trash2 size={20} />
-            </button>
+            <div className="flex items-center gap-2">
+              <Link href={`/tasks/edit/${id}`}>
+                  <Settings2 size={20} className="text-blue-500 hover:text-blue-700-700" />
+              </Link>
+              <button
+                onClick={() => handleDelete(id)}
+                disabled={isPending}
+                className="p-2 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                title="Delete task"
+              >
+                <Trash2 size={20} />
+              </button>
+            </div>
           </div>
           <ItemDescription className="text-sm">
             {data?.description}
@@ -153,6 +165,19 @@ export default function ContentRendering({ id }: ChildrenProps) {
                 <div className="avatar-username cursor-pointer text-sky-500 text-xs flex items-center gap-1.5 p-1 rounded-full">
                   <UserRoundPlus size={18} />
                   <span className="lowercase">Invite People</span>
+                </div>
+              </div>
+            </div>
+            <div className="flex ">
+              <ItemTitle className="text-gray-500 w-34">
+                <FolderGit size={18} />
+                Project
+              </ItemTitle>
+              <div className="flex items-center gap-2">
+                <div className="avatar-username  text-xs flex items-center gap-1.5 p-1 bg-gray-300/20 rounded-full">
+                  <span className="text-md text-green-500 font-bold">
+                    {projectName}
+                  </span>
                 </div>
               </div>
             </div>

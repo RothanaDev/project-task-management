@@ -193,7 +193,7 @@ export default function CreateTaskPage() {
                       <FormControl>
                         <Textarea
                           placeholder="Task description"
-                          className="min-h-[100px]"
+                          className="min-h-25"
                           {...field}
                         />
                       </FormControl>

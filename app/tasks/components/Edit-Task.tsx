@@ -1,4 +1,6 @@
 "use client";
+
+import React, { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -15,9 +17,7 @@ import { Separator } from "@/components/ui/separator";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Textarea } from "@/components/ui/textarea";
-import { useTask } from "@/hooks/use-queries";
 import { Select } from "antd";
-// import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { BreadcrumbTask } from "./Breadcrumb-Task";
 import {
   TaskUpdateFormValues,
@@ -32,73 +32,39 @@ import { queryClient } from "@/lib/query-client";
 import { toast } from "sonner";
 import SkeletonLoading from "./SkeletonLoading";
 import { useRouter } from "next/navigation";
-// import MultipleSelect from "./MultipleSelect"
+import { useTask, useProjects } from "@/hooks/use-queries";
 
+// Dummy data for selects
 const assigneesData = [
-  {
-    title: "Phorn Rothana",
-    value: "phorn-rothana",
-  },
-  {
-    title: "So Bunleng",
-    value: "so-bunleng",
-  },
-  {
-    title: "Chory Chanrady",
-    value: "chory-chanrady",
-  },
-  {
-    title: "Yoeurn Kimsan",
-    value: "yoeurn-kimsan",
-  },
+  { title: "Phorn Rothana", value: "phorn-rothana" },
+  { title: "So Bunleng", value: "so-bunleng" },
+  { title: "Chory Chanrady", value: "chory-chanrady" },
+  { title: "Yoeurn Kimsan", value: "yoeurn-kimsan" },
 ];
 const statusData = [
-  {
-    title: "Done",
-    value: "done",
-  },
-  {
-    title: "Todo",
-    value: "todo",
-  },
-  {
-    title: "In progress",
-    value: "in-progress",
-  },
+  { title: "Done", value: "done" },
+  { title: "Todo", value: "todo" },
+  { title: "In progress", value: "in-progress" },
 ];
 const priorityData = [
-  {
-    title: "High",
-    value: "high",
-  },
-  {
-    title: "Medium",
-    value: "medium",
-  },
-  {
-    title: "Low",
-    value: "low",
-  },
+  { title: "High", value: "high" },
+  { title: "Medium", value: "medium" },
+  { title: "Low", value: "low" },
 ];
-
 const TagsData = [
   { value: "design", label: "Design" },
   { value: "accessibility", label: "Accessibility" },
   { value: "documentation", label: "Documentation" },
   { value: "research", label: "Research" },
   { value: "ux", label: "UX" },
-  // ... more
 ];
 
 export function EditTask({ id }: { id: string }) {
-  const { data, isLoading, error } = useTask(id);
   const router = useRouter();
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-    reset,
-  } = useForm<TaskUpdateFormValues>({
+  const { data, isLoading } = useTask(id);
+  const { data: projects = [] } = useProjects();
+
+  const { control, handleSubmit, reset } = useForm<TaskUpdateFormValues>({
     resolver: zodResolver(taskUpdateSchema),
     defaultValues: {
       title: "",
@@ -112,30 +78,36 @@ export function EditTask({ id }: { id: string }) {
       subtasks: [],
       comments: [],
     },
-    values: {
-      title: data?.title ?? "",
-      description: data?.description ?? "",
-      assignee: data?.assignee ?? "",
-      status: data?.status ?? "in-progress",
-      priority: data?.priority ?? "high",
-      dueDate: data?.dueDate ? new Date(data.dueDate) : undefined,
-      projectId: data?.projectId ?? "",
-      tags: data?.tags ?? [],
-      subtasks: data?.subtasks ?? [],
-      comments: data?.comments ?? [],
-    },
   });
+
+  // Reset form when task data loads
+  useEffect(() => {
+    if (data) {
+      reset({
+        title: data.title ?? "",
+        description: data.description ?? "",
+        assignee: data.assignee ?? "",
+        status: data.status ?? "in-progress",
+        priority: data.priority ?? "high",
+        dueDate: data.dueDate ? new Date(data.dueDate) : undefined,
+        projectId: data.projectId ?? "",
+        tags: data.tags ?? [],
+        subtasks: data.subtasks ?? [],
+        comments: data.comments ?? [],
+      });
+    }
+  }, [data, reset]);
 
   const { fields } = useFieldArray({
     control,
     name: "subtasks",
   });
 
-  const onsubmit = async (data: TaskUpdateFormValues) => {
+  const onSubmit = async (formData: TaskUpdateFormValues) => {
     try {
       const payload = {
-        ...data,
-        dueDate: data.dueDate ? data.dueDate.toISOString() : undefined,
+        ...formData,
+        dueDate: formData.dueDate ? formData.dueDate.toISOString() : undefined,
       };
 
       await updateTask(id, payload);
@@ -146,228 +118,222 @@ export function EditTask({ id }: { id: string }) {
       toast.success(`Task ${id} updated successfully!`);
 
       router.push(`/tasks/${id}`);
-    } catch (error) {
-      console.error("Update failed:", error);
+    } catch (err) {
+      console.error("Update failed:", err);
       toast.error("Something went wrong while updating the task");
     }
   };
 
   if (isLoading) return <SkeletonLoading />;
-
-  if (!data) {
-    return <div className="p-8 text-gray-500">Task not found</div>;
-  }
+  if (!data) return <div className="p-8 text-gray-500">Task not found</div>;
 
   return (
-    <Card className="w-full border-none  h-full bg-transparent shadow-none">
+    <Card className="w-full border-none h-full bg-transparent shadow-none">
       <CardHeader>
-        <CardTitle className="text-center text-xl">Edit Task# {id}</CardTitle>
+        <CardTitle className="text-center text-xl">Edit Task #{id}</CardTitle>
         <CardDescription>Edit daily Task.</CardDescription>
       </CardHeader>
+
       <Separator className="mb-4" />
-
       <CardContent>
-        <div className="px-4">
-          <form onSubmit={handleSubmit(onsubmit)}>
-            <div className="grid grid-cols-2 gap-2">
-              <div className="grid gap-2 col-span-1">
-                <Label htmlFor="content">Title</Label>
-                <Controller
-                  defaultValue=""
-                  name="title"
-                  control={control}
-                  render={({ field, fieldState }) => (
-                    <Input
-                      {...field}
-                      value={field.value ?? ""}
-                      placeholder="Title"
-                    />
-                  )}
-                />
-              </div>
-              <div className="flex col-span-1 flex-col gap-2">
-                <Label className="">Assignee</Label>
-                {/* Select Tags */}
-                {/* <DropdownSelectTags/> */}
-                <Controller
-                  name="assignee"
-                  control={control}
-                  render={({ field }) => (
-                    <Select
-                      value={field.value || undefined}
-                      onChange={field.onChange}
-                      placeholder="Select assignee"
-                      disabled={isLoading}
-                      style={{ width: "100%", height: "100%" }}
-                      allowClear
-                      showSearch
-                    >
-                      {assigneesData.map((item) => (
-                        <Select.Option
-                          key={item.value}
-                          value={item.value}
-                          label={item.title}
-                        >
-                          {item.title}
-                        </Select.Option>
-                      ))}
-                    </Select>
-                  )}
-                />
-              </div>
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="px-4 grid grid-cols-2 gap-2"
+        >
+          {/* Title */}
+          <div className="grid gap-2 col-span-2">
+            <Label htmlFor="title">Title</Label>
+            <Controller
+              name="title"
+              control={control}
+              render={({ field }) => <Input {...field} placeholder="Title" />}
+            />
+          </div>
 
-              <div className="flex col-span-1 flex-col gap-2">
-                <Label htmlFor="description">Status</Label>
-                <Controller
-                  name="status"
-                  control={control}
-                  render={({ field }) => (
-                    <Select
-                      value={field.value || undefined}
-                      onChange={field.onChange}
-                      placeholder="Select assignee"
-                      disabled={isLoading}
-                      style={{ width: "100%", height: "100%" }}
-                      allowClear
-                      showSearch
-                    >
-                      {statusData.map((item) => (
-                        <Select.Option
-                          key={item.value}
-                          value={item.value}
-                          label={item.title}
-                        >
-                          {item.title}
-                        </Select.Option>
-                      ))}
-                    </Select>
-                  )}
-                />
-              </div>
-
-              <div className="flex col-span-1 flex-col gap-2">
-                <Label htmlFor="description">Priority</Label>
-                <Controller
-                  name="priority"
-                  control={control}
-                  render={({ field }) => (
-                    <Select
-                      value={field.value || undefined}
-                      onChange={field.onChange}
-                      placeholder="Select priority"
-                      disabled={isLoading}
-                      style={{ width: "100%", height: "100%" }}
-                      allowClear
-                      showSearch
-                    >
-                      {priorityData.map((item) => (
-                        <Select.Option
-                          key={item.value}
-                          value={item.value}
-                          label={item.title}
-                        >
-                          {item.title}
-                        </Select.Option>
-                      ))}
-                    </Select>
-                  )}
-                />
-              </div>
-
-              <div className="col-span-1">
-                {/* Due Date */}
-                <Controller
-                  name="dueDate"
-                  control={control}
-                  render={({ field }) => (
-                    <DueDate
-                      value={field.value}
-                      onChange={(date) => field.onChange(date)}
-                    />
-                  )}
-                />
-              </div>
-              <div className="flex col-span-1 flex-col gap-2">
-                <Label className="">Tags</Label>
-
-                <AntdMultiSelect
-                  control={control}
-                  initialOptions={TagsData}
-                  placeholder="Select multiple tags"
-                />
-              </div>
-              <div className="grid gap-2 col-span-2">
-                <Label htmlFor="description">Description</Label>
-                <Controller
-                  name="description"
-                  control={control}
-                  render={({ field, fieldState }) => (
-                    <Textarea
-                      {...field}
-                      value={field.value ?? ""}
-                      placeholder="Description"
-                      className=""
-                    />
-                  )}
-                />
-              </div>
-
-              <div className="col-span-2">
-                <Label htmlFor="content">Subtask</Label>
-              </div>
-              {fields.map((field, index) => (
-                <div
-                  key={field.id}
-                  className={cn(
-                    "flex items-center gap-3 p-3 rounded",
-                    "bg-background border  ",
-                    "group" // optional: for hover effects
-                  )}
+          {/* Assignee */}
+          <div className="flex flex-col gap-2 col-span-1">
+            <Label>Assignee</Label>
+            <Controller
+              name="assignee"
+              control={control}
+              render={({ field }) => (
+                <Select
+                  value={field.value || undefined}
+                  onChange={field.onChange}
+                  placeholder="Select assignee"
+                  allowClear
+                  showSearch
+                  style={{ width: "100%" }}
                 >
-                  <Controller
-                    name={`subtasks.${index}.completed`}
-                    control={control}
-                    render={({ field: { value, onChange } }) => (
-                      <>
-                        <Checkbox
-                          id={`subtask-${field.id}`}
-                          checked={value ?? false} // safe fallback
-                          onCheckedChange={onChange}
-                          className="h-5 rounded-full w-5 data-[state=checked]:bg-primary"
-                        />
+                  {assigneesData.map((item) => (
+                    <Select.Option key={item.value} value={item.value}>
+                      {item.title}
+                    </Select.Option>
+                  ))}
+                </Select>
+              )}
+            />
+          </div>
 
-                        <Label
-                          htmlFor={`subtask-${field.id}`}
-                          className={cn(
-                            "text-sm font-medium cursor-pointer flex-1 select-none",
-                            value && " text-muted-foreground/80"
-                          )}
-                        >
-                          {field.title}
-                        </Label>
-                      </>
-                    )}
-                  />
-                </div>
-              ))}
-            </div>
-            <div className="w-full mt-3 flex  justify-end gap-3">
-              <Link
-                href={"/tasks"}
-                type="submit"
-                className=" max-w-xl border flex items-center justify-center rounded-sm px-7 text-sm"
+          {/* Status */}
+          <div className="flex flex-col gap-2 col-span-1">
+            <Label>Status</Label>
+            <Controller
+              name="status"
+              control={control}
+              render={({ field }) => (
+                <Select
+                  value={field.value || undefined}
+                  onChange={field.onChange}
+                  placeholder="Select status"
+                  allowClear
+                  showSearch
+                  style={{ width: "100%" }}
+                >
+                  {statusData.map((item) => (
+                    <Select.Option key={item.value} value={item.value}>
+                      {item.title}
+                    </Select.Option>
+                  ))}
+                </Select>
+              )}
+            />
+          </div>
+
+          {/* Priority */}
+          <div className="flex flex-col gap-2 col-span-1">
+            <Label>Priority</Label>
+            <Controller
+              name="priority"
+              control={control}
+              render={({ field }) => (
+                <Select
+                  value={field.value || undefined}
+                  onChange={field.onChange}
+                  placeholder="Select priority"
+                  allowClear
+                  showSearch
+                  style={{ width: "100%" }}
+                >
+                  {priorityData.map((item) => (
+                    <Select.Option key={item.value} value={item.value}>
+                      {item.title}
+                    </Select.Option>
+                  ))}
+                </Select>
+              )}
+            />
+          </div>
+
+          {/* Due Date */}
+          <div className="col-span-1">
+            <Controller
+              name="dueDate"
+              control={control}
+              render={({ field }) => (
+                <DueDate value={field.value} onChange={field.onChange} />
+              )}
+            />
+          </div>
+
+          {/* Project */}
+          <div className="flex flex-col gap-2 col-span-1">
+            <Label>Project</Label>
+            <Controller
+              name="projectId"
+              control={control}
+              render={({ field }) => (
+                <Select
+                  value={field.value || undefined}
+                  onChange={field.onChange}
+                  placeholder="Select project"
+                  allowClear
+                  showSearch
+                  style={{ width: "100%" }}
+                >
+                  {projects.map((p) => (
+                    <Select.Option key={p.id} value={p.id}>
+                      {p.name}
+                    </Select.Option>
+                  ))}
+                </Select>
+              )}
+            />
+          </div>
+
+          {/* Tags */}
+          <div className="flex flex-col gap-2 col-span-2">
+            <Label>Tags</Label>
+            <AntdMultiSelect
+              control={control}
+              initialOptions={TagsData}
+              placeholder="Select multiple tags"
+            />
+          </div>
+
+          {/* Description */}
+          <div className="grid gap-2 col-span-2">
+            <Label htmlFor="description">Description</Label>
+            <Controller
+              name="description"
+              control={control}
+              render={({ field }) => (
+                <Textarea {...field} placeholder="Description" />
+              )}
+            />
+          </div>
+
+          {/* Subtasks */}
+          <div className="col-span-2">
+            <Label>Subtasks</Label>
+            {fields.map((field, index) => (
+              <div
+                key={field.id}
+                className="flex items-center gap-3 p-3 rounded bg-background border group"
               >
-                Back to Tasks
-              </Link>
-              <Button
-                type="submit"
-                className="px-7 max-w-xl rounded-sm cursor-pointer"
-              >
-                Save Edit
-              </Button>
-            </div>
-          </form>
-        </div>
+                <Controller
+                  name={`subtasks.${index}.completed`}
+                  control={control}
+                  render={({ field: { value, onChange } }) => (
+                    <>
+                      <Checkbox
+                        id={`subtask-${field.id}`}
+                        checked={value ?? false}
+                        onCheckedChange={onChange}
+                        className="h-5 w-5 rounded-full data-[state=checked]:bg-primary"
+                      />
+                      <Label
+                        htmlFor={`subtask-${field.id}`}
+                        className={cn(
+                          "text-sm font-medium cursor-pointer flex-1 select-none",
+                          value && "text-muted-foreground/80"
+                        )}
+                      >
+                        {field.title ?? `Subtask ${index + 1}`}
+                      </Label>
+                    </>
+                  )}
+                />
+              </div>
+            ))}
+          </div>
+
+          {/* Buttons */}
+          <div className="col-span-2 flex justify-end gap-3 mt-3">
+            <Link
+              href="/tasks"
+              className="max-w-xl border flex items-center justify-center rounded-sm px-7 text-sm"
+            >
+              Back to Tasks
+            </Link>
+            <Button
+              type="submit"
+              className="px-7 max-w-xl rounded-sm cursor-pointer"
+            >
+              Save Edit
+            </Button>
+          </div>
+        </form>
       </CardContent>
 
       <CardFooter>
