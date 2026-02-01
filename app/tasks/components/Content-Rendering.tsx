@@ -69,7 +69,7 @@ export default function ContentRendering({ id }: ChildrenProps) {
             <ItemTitle className="text-xl font-bold">{data?.title}</ItemTitle>
             <div className="flex items-center gap-2">
               <Link href={`/tasks/edit/${id}`}>
-                  <Settings2 size={20} className="text-blue-500 hover:text-blue-700-700" />
+                <Settings2 size={20} className="text-blue-500 hover:text-blue-700-700" />
               </Link>
               <button
                 onClick={() => handleDelete(id)}
@@ -93,22 +93,20 @@ export default function ContentRendering({ id }: ChildrenProps) {
             <div className="flex gap-1">
               <ItemTitle>Priority</ItemTitle>
               <span
-                className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs ${
-                  data?.priority === "high"
+                className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs ${data?.priority === "high"
                     ? "bg-green-100 text-green-800"
                     : data?.priority === "medium"
-                    ? "bg-yellow-100 text-yellow-800"
-                    : "bg-blue-100 text-blue-800"
-                }`}
+                      ? "bg-yellow-100 text-yellow-800"
+                      : "bg-blue-100 text-blue-800"
+                  }`}
               >
                 <span
-                  className={`h-1.5 w-1.5 rounded-full ${
-                    data?.priority === "high"
+                  className={`h-1.5 w-1.5 rounded-full ${data?.priority === "high"
                       ? "bg-green-500"
                       : data?.priority === "medium"
-                      ? "bg-yellow-500"
-                      : "bg-blue-500"
-                  }`}
+                        ? "bg-yellow-500"
+                        : "bg-blue-500"
+                    }`}
                 ></span>
                 {data?.priority}
               </span>
@@ -196,22 +194,20 @@ export default function ContentRendering({ id }: ChildrenProps) {
               <div className="flex items-center gap-2">
                 <div className="inline-flex justify-center">
                   <span
-                    className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs ${
-                      data?.status === "done"
+                    className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs ${data?.status === "done"
                         ? "bg-green-100 text-green-800"
                         : data?.status === "in-progress"
-                        ? "bg-yellow-100 text-yellow-800"
-                        : "bg-blue-100 text-blue-800"
-                    }`}
+                          ? "bg-yellow-100 text-yellow-800"
+                          : "bg-blue-100 text-blue-800"
+                      }`}
                   >
                     <span
-                      className={`h-1.5 w-1.5 rounded-full ${
-                        data?.status === "done"
+                      className={`h-1.5 w-1.5 rounded-full ${data?.status === "done"
                           ? "bg-green-500"
                           : data?.status === "in-progress"
-                          ? "bg-yellow-500"
-                          : "bg-blue-500"
-                      }`}
+                            ? "bg-yellow-500"
+                            : "bg-blue-500"
+                        }`}
                     ></span>
                     {data?.status}
                   </span>

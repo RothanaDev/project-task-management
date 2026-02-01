@@ -7,9 +7,9 @@ export default function Error({ error, reset }: { error: Error; reset: () => voi
   useEffect(() => {
     console.error('Error caught in error boundary:', error)
   }, [error])
-    return (
+  return (
     <div className="p-8 text-center w-full">
-      <EmptyTable title='Error fetching data' description='Something went wrong' icon={Ban}/>
+      <EmptyTable title='Error fetching data' description='Something went wrong' icon={Ban} />
     </div>
   )
 }

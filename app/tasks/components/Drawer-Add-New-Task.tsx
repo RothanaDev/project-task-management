@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import {  Plus } from "lucide-react"
+import { Plus } from "lucide-react"
 
 
 import { Button } from "@/components/ui/button"
@@ -160,16 +160,16 @@ export function DrawerAddNewTask() {
                                     {/* <DueDate /> */}
                                 </div>
                                 <div className="flex flex-col gap-2">
-                                    <Label  className="">Tags</Label>
+                                    <Label className="">Tags</Label>
                                     {/* Select Tags */}
                                     {/* <DropdownSelectTags/> */}
-                                    <Selector items= {data} placeholder="Select tags" selectLabel="Tags"/>
+                                    <Selector items={data} placeholder="Select tags" selectLabel="Tags" />
                                 </div>
                                 <div className="flex flex-col gap-2">
-                                    <Label  className="">Assignee</Label>
+                                    <Label className="">Assignee</Label>
                                     {/* Select Tags */}
                                     {/* <DropdownSelectTags/> */}
-                                    <Selector items= {assigneesData} placeholder="Select assignees" selectLabel="Assignee"/>
+                                    <Selector items={assigneesData} placeholder="Select assignees" selectLabel="Assignee" />
                                 </div>
                             </div>
                         </form>

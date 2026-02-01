@@ -55,7 +55,7 @@ export default function Layout({
         </div>
       </header>
       <div className="p-6 flex flex-col w-full pt-25">{children}</div>
-      <Toaster/>
+      <Toaster />
     </div>
   );
 }

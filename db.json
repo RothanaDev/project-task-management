@@ -60,31 +60,6 @@
       "id": "e426"
     },
     {
-      "title": "Test on progress",
-      "description": "Hello on progress test",
-      "projectId": "2",
-      "priority": "low",
-      "status": "done",
-      "dueDate": "2026-01-15T00:00:00.000Z",
-      "tags": [
-        "urgent",
-        "accessibility"
-      ],
-      "assignee": "phorn-rothana",
-      "subtasks": [
-        {
-          "title": "hello sir",
-          "completed": false
-        },
-        {
-          "title": "fsefsf",
-          "completed": false
-        }
-      ],
-      "comments": [],
-      "id": "4fe8"
-    },
-    {
       "title": "Vitae inventore labo",
       "description": "Dolorem placeat imp",
       "projectId": "2",

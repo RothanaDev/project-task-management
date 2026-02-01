@@ -18,7 +18,7 @@ export default async function TaskDetailPage({ params }: ChildrenProp) {
 
     return (
         <div className="grid grid-cols-1 w-full">
-            <EditTask  id={id}/>
+            <EditTask id={id} />
         </div>
 
     )
