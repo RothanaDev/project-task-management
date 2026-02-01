@@ -1,10 +1,7 @@
-import { Checkbox } from "@/components/ui/checkbox"
 import {
     Table,
     TableBody,
     TableCell,
-    TableHead,
-    TableHeader,
     TableRow,
 } from "@/components/ui/table"
 

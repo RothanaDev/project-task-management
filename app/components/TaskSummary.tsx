@@ -5,7 +5,6 @@ import {
   ClipboardCheck,
   Check,
   Clock,
-  ListTodo,
   Flag,
   TrendingUp,
 } from "lucide-react";

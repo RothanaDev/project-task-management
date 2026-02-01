@@ -1,8 +1,6 @@
 import React from 'react'
 
-type Props = {}
-
-export default function Activity({ }: Props) {
+export default function Activity() {
   return (
     <div>Activity</div>
   )

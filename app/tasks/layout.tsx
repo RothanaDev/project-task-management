@@ -1,23 +1,15 @@
 "use client";
 import { Bell, Plus, CircleX } from "lucide-react";
-import {
-  Item,
-  ItemActions,
-  ItemContent,
-  ItemDescription,
-  ItemTitle,
-} from "@/components/ui/item";
 import { useTasks } from "@/hooks/use-queries";
 import Link from "next/link";
 import { EmptyTable } from "./components/Empty-Table";
-import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { Toaster } from "@/components/ui/sonner";
 
 export default function Layout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  const { data, isLoading, error } = useTasks();
+  const { data, isLoading: _isLoading, error } = useTasks();
 
   if (error)
     return (

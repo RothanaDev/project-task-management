@@ -19,7 +19,6 @@ import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { ToggleSwitch } from "./ToggleSwitch"
 import { Separator } from "@/components/ui/separator"
-import { DueDate } from "./DueDate"
 import { Selector } from "./Selector"
 
 const presetOptions = {

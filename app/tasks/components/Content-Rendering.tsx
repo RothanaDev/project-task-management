@@ -25,7 +25,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { BreadcrumbTask } from "./Breadcrumb-Task";
 import SkeletonTaskDetail from "./SkeletonTaskDetail";
 import { useHandleDeleteTask } from "./HandleDeleteTask";
-import { EditTask } from "./Edit-Task";
 import Link from "next/link";
 type ChildrenProps = {
   id: string;
@@ -51,7 +50,7 @@ export default function ContentRendering({ id }: ChildrenProps) {
     name: "Subtask",
     url: "subtask",
   });
-  const { data, isLoading, error } = useTask(id);
+  const { data, isLoading, error: _error } = useTask(id);
   const { data: projects } = useProjects();
   const { handleDelete, isPending } = useHandleDeleteTask();
   const projectName = projects.find(
@@ -94,18 +93,18 @@ export default function ContentRendering({ id }: ChildrenProps) {
               <ItemTitle>Priority</ItemTitle>
               <span
                 className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs ${data?.priority === "high"
-                    ? "bg-green-100 text-green-800"
-                    : data?.priority === "medium"
-                      ? "bg-yellow-100 text-yellow-800"
-                      : "bg-blue-100 text-blue-800"
+                  ? "bg-green-100 text-green-800"
+                  : data?.priority === "medium"
+                    ? "bg-yellow-100 text-yellow-800"
+                    : "bg-blue-100 text-blue-800"
                   }`}
               >
                 <span
                   className={`h-1.5 w-1.5 rounded-full ${data?.priority === "high"
-                      ? "bg-green-500"
-                      : data?.priority === "medium"
-                        ? "bg-yellow-500"
-                        : "bg-blue-500"
+                    ? "bg-green-500"
+                    : data?.priority === "medium"
+                      ? "bg-yellow-500"
+                      : "bg-blue-500"
                     }`}
                 ></span>
                 {data?.priority}
@@ -195,18 +194,18 @@ export default function ContentRendering({ id }: ChildrenProps) {
                 <div className="inline-flex justify-center">
                   <span
                     className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs ${data?.status === "done"
-                        ? "bg-green-100 text-green-800"
-                        : data?.status === "in-progress"
-                          ? "bg-yellow-100 text-yellow-800"
-                          : "bg-blue-100 text-blue-800"
+                      ? "bg-green-100 text-green-800"
+                      : data?.status === "in-progress"
+                        ? "bg-yellow-100 text-yellow-800"
+                        : "bg-blue-100 text-blue-800"
                       }`}
                   >
                     <span
                       className={`h-1.5 w-1.5 rounded-full ${data?.status === "done"
-                          ? "bg-green-500"
-                          : data?.status === "in-progress"
-                            ? "bg-yellow-500"
-                            : "bg-blue-500"
+                        ? "bg-green-500"
+                        : data?.status === "in-progress"
+                          ? "bg-yellow-500"
+                          : "bg-blue-500"
                         }`}
                     ></span>
                     {data?.status}

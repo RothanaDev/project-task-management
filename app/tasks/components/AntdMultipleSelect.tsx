@@ -4,7 +4,6 @@ import React from 'react'
 import { Select } from 'antd'
 import type { SelectProps } from 'antd'
 import { Controller, Control } from 'react-hook-form'
-import { TaskFormValues } from '@/lib/validators/task'
 import { TaskUpdateFormValues } from '@/lib/validators/taskUpdateSchema'
 
 interface AntdCreatableTagSelectProps {
