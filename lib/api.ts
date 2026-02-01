@@ -1,4 +1,11 @@
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001"
+const getBaseUrl = () => {
+  if (typeof window !== "undefined") return "/api" // browser should use relative url
+  if (process.env.NEXT_PUBLIC_API_URL) return process.env.NEXT_PUBLIC_API_URL // use env var if provided
+  return "http://localhost:3000/api" // default for local ssr
+}
+
+const API_BASE_URL = getBaseUrl()
+
 import type { TaskFormValues } from "@/lib/validators/task"
 import { TaskUpdateFormValues } from "./validators/taskUpdateSchema"
 
@@ -60,7 +67,7 @@ export async function fetchTasksByProject(projectId: string) {
 export async function deleteTask(id: string) {
   try {
     const response = await fetch(`${API_BASE_URL}/tasks/${id}`, {
-      method: 'DELETE',
+      method: "DELETE",
     })
     if (!response.ok) throw new Error("Failed to delete task")
     return response.json()
@@ -82,7 +89,6 @@ export async function getTasksByProject(projectId: string) {
   return fetchTasksByProject(projectId)
 }
 
-
 export async function createTask(data: TaskFormValues) {
   try {
     const res = await fetch(`${API_BASE_URL}/tasks`, {
@@ -99,9 +105,9 @@ export async function createTask(data: TaskFormValues) {
   }
 }
 
-type TaskUpdateApiPayload = Omit<TaskUpdateFormValues, 'dueDate'> & {
-  dueDate?: string;   // or string | null if your backend wants null
-};
+type TaskUpdateApiPayload = Omit<TaskUpdateFormValues, "dueDate"> & {
+  dueDate?: string // or string | null if your backend wants null
+}
 
 export async function updateTask(id: string, data: TaskUpdateApiPayload) {
   try {
