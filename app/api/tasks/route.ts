@@ -78,7 +78,7 @@ export async function POST(request: Request) {
           ${body.priority}, 
           ${body.status}, 
           ${body.dueDate}, 
-          ${body.tags || []}, 
+          ${JSON.stringify(body.tags || [])}, 
           ${body.assignee || ''}, 
           ${JSON.stringify(body.subtasks || [])}, 
           ${JSON.stringify(body.comments || [])}

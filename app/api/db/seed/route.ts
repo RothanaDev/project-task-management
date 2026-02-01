@@ -8,7 +8,17 @@ export async function GET() {
     for (const project of db.projects) {
       await sql`
         INSERT INTO projects (id, slug, name, description, color, status, tasks_total, tasks_completed, due_date)
-        VALUES (${project.id}, ${project.slug}, ${project.name}, ${project.description}, ${project.color}, ${project.status}, ${project.tasksTotal}, ${project.tasksCompleted}, ${project.dueDate})
+        VALUES (
+          ${project.id}, 
+          ${project.slug}, 
+          ${project.name}, 
+          ${project.description}, 
+          ${project.color}, 
+          ${project.status}, 
+          ${project.tasksTotal}, 
+          ${project.tasksCompleted}, 
+          ${project.dueDate}
+        )
         ON CONFLICT (id) DO NOTHING;
       `;
     }
@@ -25,7 +35,7 @@ export async function GET() {
           ${task.priority}, 
           ${task.status}, 
           ${task.dueDate}, 
-          ${task.tags as string[]}, 
+          ${JSON.stringify(task.tags)}, 
           ${task.assignee}, 
           ${JSON.stringify(task.subtasks)}, 
           ${JSON.stringify(task.comments)}

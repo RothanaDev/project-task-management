@@ -53,10 +53,10 @@ export async function PUT(
           priority = COALESCE(${body.priority}, priority),
           status = COALESCE(${body.status}, status),
           due_date = COALESCE(${body.dueDate}, due_date),
-          tags = COALESCE(${body.tags}, tags),
+          tags = COALESCE(${JSON.stringify(body.tags)}::jsonb, tags),
           assignee = COALESCE(${body.assignee}, assignee),
-          subtasks = COALESCE(${JSON.stringify(body.subtasks)}, subtasks),
-          comments = COALESCE(${JSON.stringify(body.comments)}, comments)
+          subtasks = COALESCE(${JSON.stringify(body.subtasks)}::jsonb, subtasks),
+          comments = COALESCE(${JSON.stringify(body.comments)}::jsonb, comments)
         WHERE id = ${id}
         RETURNING *;
       `;
