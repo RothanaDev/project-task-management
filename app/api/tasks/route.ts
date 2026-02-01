@@ -78,10 +78,10 @@ export async function POST(request: Request) {
           ${body.priority}, 
           ${body.status}, 
           ${body.dueDate}, 
-          ${JSON.stringify(body.tags || [])}, 
+          ${JSON.stringify(body.tags || [])}::jsonb, 
           ${body.assignee || ''}, 
-          ${JSON.stringify(body.subtasks || [])}, 
-          ${JSON.stringify(body.comments || [])}
+          ${JSON.stringify(body.subtasks || [])}::jsonb, 
+          ${JSON.stringify(body.comments || [])}::jsonb
         )
         RETURNING id, title, description, project_id as "projectId", priority, status, due_date as "dueDate", tags, assignee, subtasks, comments;
       `;
