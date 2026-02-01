@@ -1,12 +1,17 @@
-const API_BASE_URL = "http://localhost:3001"
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001"
 import type { TaskFormValues } from "@/lib/validators/task"
 import { Subtask } from "./types"
 import { TaskUpdateFormValues } from "./validators/taskUpdateSchema"
 
 export async function fetchProjects() {
-  const response = await fetch(`${API_BASE_URL}/projects`)
-  if (!response.ok) throw new Error("Failed to fetch projects")
-  return response.json()
+  try {
+    const response = await fetch(`${API_BASE_URL}/projects`)
+    if (!response.ok) throw new Error("Failed to fetch projects")
+    return response.json()
+  } catch (error) {
+    console.error("fetchProjects error:", error)
+    return []
+  }
 }
 
 export async function fetchProject(id: string) {
@@ -16,9 +21,14 @@ export async function fetchProject(id: string) {
 }
 
 export async function fetchTasks() {
-  const response = await fetch(`${API_BASE_URL}/tasks`)
-  if (!response.ok) throw new Error("Failed to fetch tasks")
-  return response.json()
+  try {
+    const response = await fetch(`${API_BASE_URL}/tasks`)
+    if (!response.ok) throw new Error("Failed to fetch tasks")
+    return response.json()
+  } catch (error) {
+    console.error("fetchTasks error:", error)
+    return []
+  }
 }
 
 export async function fetchTask(id: string) {

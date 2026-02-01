@@ -1,4 +1,5 @@
 import React from "react";
+export const dynamic = "force-dynamic";
 
 import { fetchProjects, fetchTasks } from "@/lib/api";
 import { Bell, BellRing, Plus } from "lucide-react";
