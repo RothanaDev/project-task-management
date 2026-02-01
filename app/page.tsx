@@ -11,8 +11,13 @@ import { Button } from "@/components/ui/button";
 // import { Skeletons } from "./components/skeleton";
 
 export default async function DashboardPage() {
-  const tasks = await fetchTasks();
-  const projects = await fetchProjects();
+  let tasks = [];
+  let projects = [];
+  try {
+    [tasks, projects] = await Promise.all([fetchTasks(), fetchProjects()]);
+  } catch (error) {
+    console.error("Error in DashboardPage fetches:", error);
+  }
   return (
     <main className="flex-1 bg-gray-100 min-h-screen">
       {/* <div className="mb-4 bg-sidebar flex items-center justify-between shadow z-10 top-0 px-10">

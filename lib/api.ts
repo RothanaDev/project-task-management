@@ -1,6 +1,5 @@
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001"
 import type { TaskFormValues } from "@/lib/validators/task"
-import { Subtask } from "./types"
 import { TaskUpdateFormValues } from "./validators/taskUpdateSchema"
 
 export async function fetchProjects() {
@@ -15,9 +14,14 @@ export async function fetchProjects() {
 }
 
 export async function fetchProject(id: string) {
-  const response = await fetch(`${API_BASE_URL}/projects/${id}`)
-  if (!response.ok) throw new Error("Project not found")
-  return response.json()
+  try {
+    const response = await fetch(`${API_BASE_URL}/projects/${id}`)
+    if (!response.ok) throw new Error("Project not found")
+    return response.json()
+  } catch (error) {
+    console.error("fetchProject error:", error)
+    return null
+  }
 }
 
 export async function fetchTasks() {
@@ -32,23 +36,38 @@ export async function fetchTasks() {
 }
 
 export async function fetchTask(id: string) {
-  const response = await fetch(`${API_BASE_URL}/tasks/${id}`)
-  if (!response.ok) throw new Error("Task not found")
-  return response.json()
+  try {
+    const response = await fetch(`${API_BASE_URL}/tasks/${id}`)
+    if (!response.ok) throw new Error("Task not found")
+    return response.json()
+  } catch (error) {
+    console.error("fetchTask error:", error)
+    return null
+  }
 }
 
 export async function fetchTasksByProject(projectId: string) {
-  const response = await fetch(`${API_BASE_URL}/tasks?projectId=${projectId}`)
-  if (!response.ok) throw new Error("Failed to fetch tasks")
-  return response.json()
+  try {
+    const response = await fetch(`${API_BASE_URL}/tasks?projectId=${projectId}`)
+    if (!response.ok) throw new Error("Failed to fetch tasks")
+    return response.json()
+  } catch (error) {
+    console.error("fetchTasksByProject error:", error)
+    return []
+  }
 }
 
 export async function deleteTask(id: string) {
-  const response = await fetch(`${API_BASE_URL}/tasks/${id}`, {
-    method: 'DELETE',
-  })
-  if (!response.ok) throw new Error("Failed to delete task")
-  return response.json()
+  try {
+    const response = await fetch(`${API_BASE_URL}/tasks/${id}`, {
+      method: 'DELETE',
+    })
+    if (!response.ok) throw new Error("Failed to delete task")
+    return response.json()
+  } catch (error) {
+    console.error("deleteTask error:", error)
+    throw error // Re-throw for mutation error handling
+  }
 }
 
 export async function getProject(id: string) {
@@ -65,14 +84,19 @@ export async function getTasksByProject(projectId: string) {
 
 
 export async function createTask(data: TaskFormValues) {
-  const res = await fetch(`${API_BASE_URL}/tasks`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
-  })
+  try {
+    const res = await fetch(`${API_BASE_URL}/tasks`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    })
 
-  if (!res.ok) throw new Error("Failed to create task")
-  return res.json()
+    if (!res.ok) throw new Error("Failed to create task")
+    return res.json()
+  } catch (error) {
+    console.error("createTask error:", error)
+    throw error
+  }
 }
 
 type TaskUpdateApiPayload = Omit<TaskUpdateFormValues, 'dueDate'> & {
@@ -80,12 +104,17 @@ type TaskUpdateApiPayload = Omit<TaskUpdateFormValues, 'dueDate'> & {
 };
 
 export async function updateTask(id: string, data: TaskUpdateApiPayload) {
-  const res = await fetch(`${API_BASE_URL}/tasks/${id}`, {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
-  })
+  try {
+    const res = await fetch(`${API_BASE_URL}/tasks/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    })
 
-  if (!res.ok) throw new Error("Failed to update task")
-  return res.json()
+    if (!res.ok) throw new Error("Failed to update task")
+    return res.json()
+  } catch (error) {
+    console.error("updateTask error:", error)
+    throw error
+  }
 }
