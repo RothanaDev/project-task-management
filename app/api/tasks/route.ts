@@ -94,7 +94,10 @@ export async function POST(request: Request) {
             return NextResponse.json(newTask, { status: 201 });
         }
     } catch (error) {
+        console.error("POST /api/tasks error:", error);
+        console.error("Request body:", await request.clone().json().catch(() => "Could not parse body"));
         const message = error instanceof Error ? error.message : "Unknown error";
-        return NextResponse.json({ error: message }, { status: 500 });
+        const stack = error instanceof Error ? error.stack : undefined;
+        return NextResponse.json({ error: message, stack, details: String(error) }, { status: 500 });
     }
 }

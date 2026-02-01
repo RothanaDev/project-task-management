@@ -1,15 +1,13 @@
 const getBaseUrl = () => {
-  // 1. Browser: Always use relative path
   if (typeof window !== "undefined") return "/api"
 
-  // 2. Production: Use Vercel's automatic environment variable
+  // If we are on the server, we need the full URL
   if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}/api`
 
-  // 3. User Defined: Use custom env var if provided
-  if (process.env.NEXT_PUBLIC_API_URL) return process.env.NEXT_PUBLIC_API_URL
-
-  // 4. Local: Standard development port
-  return "http://localhost:3001/api" // Fallback to your local json-server or handle via route
+  // For local development, try to detect the port or default to 3000
+  // Note: If you run on 3002, you can set PORT=3002 in your .env
+  const port = process.env.PORT || 3000
+  return `http://localhost:${port}/api`
 }
 
 const API_BASE_URL = getBaseUrl()
@@ -19,15 +17,23 @@ import { TaskUpdateFormValues } from "./validators/taskUpdateSchema"
 
 export async function fetchProjects() {
   try {
-    const response = await fetch(`${API_BASE_URL}/projects`, { cache: 'no-store' })
-    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
-    const text = await response.text(); // Get text first to debug if it's not JSON
-    try {
-      return JSON.parse(text);
-    } catch (e) {
-      console.error("fetchProjects: Received HTML instead of JSON from", `${API_BASE_URL}/projects`);
-      return [];
+    // We add a special header to bypass Vercel's deployment protection if it exists
+    const headers: Record<string, string> = {}
+    if (process.env.VERCEL_AUTOMATION_BYPASS_SECRET) {
+      headers['x-vercel-protection-bypass'] = process.env.VERCEL_AUTOMATION_BYPASS_SECRET
     }
+
+    const response = await fetch(`${API_BASE_URL}/projects`, {
+      cache: 'no-store',
+      headers
+    })
+
+    if (response.status === 401) {
+      console.error("401 Unauthorized: Vercel Deployment Protection is blocking this fetch. Please disable it in Project Settings > Security.")
+    }
+
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
+    return response.json()
   } catch (error) {
     console.error("fetchProjects error:", error)
     return []
@@ -36,7 +42,15 @@ export async function fetchProjects() {
 
 export async function fetchProject(id: string) {
   try {
-    const response = await fetch(`${API_BASE_URL}/projects/${id}`, { cache: 'no-store' })
+    const headers: Record<string, string> = {}
+    if (process.env.VERCEL_AUTOMATION_BYPASS_SECRET) {
+      headers['x-vercel-protection-bypass'] = process.env.VERCEL_AUTOMATION_BYPASS_SECRET
+    }
+
+    const response = await fetch(`${API_BASE_URL}/projects/${id}`, {
+      cache: 'no-store',
+      headers
+    })
     if (!response.ok) throw new Error("Project not found")
     return response.json()
   } catch (error) {
@@ -47,15 +61,22 @@ export async function fetchProject(id: string) {
 
 export async function fetchTasks() {
   try {
-    const response = await fetch(`${API_BASE_URL}/tasks`, { cache: 'no-store' })
-    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
-    const text = await response.text();
-    try {
-      return JSON.parse(text);
-    } catch (e) {
-      console.error("fetchTasks: Received HTML instead of JSON from", `${API_BASE_URL}/tasks`);
-      return [];
+    const headers: Record<string, string> = {}
+    if (process.env.VERCEL_AUTOMATION_BYPASS_SECRET) {
+      headers['x-vercel-protection-bypass'] = process.env.VERCEL_AUTOMATION_BYPASS_SECRET
     }
+
+    const response = await fetch(`${API_BASE_URL}/tasks`, {
+      cache: 'no-store',
+      headers
+    })
+
+    if (response.status === 401) {
+      console.error("401 Unauthorized: Vercel Deployment Protection is blocking this fetch.")
+    }
+
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`)
+    return response.json()
   } catch (error) {
     console.error("fetchTasks error:", error)
     return []
@@ -64,7 +85,15 @@ export async function fetchTasks() {
 
 export async function fetchTask(id: string) {
   try {
-    const response = await fetch(`${API_BASE_URL}/tasks/${id}`, { cache: 'no-store' })
+    const headers: Record<string, string> = {}
+    if (process.env.VERCEL_AUTOMATION_BYPASS_SECRET) {
+      headers['x-vercel-protection-bypass'] = process.env.VERCEL_AUTOMATION_BYPASS_SECRET
+    }
+
+    const response = await fetch(`${API_BASE_URL}/tasks/${id}`, {
+      cache: 'no-store',
+      headers
+    })
     if (!response.ok) throw new Error("Task not found")
     return response.json()
   } catch (error) {
@@ -75,7 +104,15 @@ export async function fetchTask(id: string) {
 
 export async function fetchTasksByProject(projectId: string) {
   try {
-    const response = await fetch(`${API_BASE_URL}/tasks?projectId=${projectId}`, { cache: 'no-store' })
+    const headers: Record<string, string> = {}
+    if (process.env.VERCEL_AUTOMATION_BYPASS_SECRET) {
+      headers['x-vercel-protection-bypass'] = process.env.VERCEL_AUTOMATION_BYPASS_SECRET
+    }
+
+    const response = await fetch(`${API_BASE_URL}/tasks?projectId=${projectId}`, {
+      cache: 'no-store',
+      headers
+    })
     if (!response.ok) throw new Error("Failed to fetch tasks")
     return response.json()
   } catch (error) {
@@ -93,7 +130,7 @@ export async function deleteTask(id: string) {
     return response.json()
   } catch (error) {
     console.error("deleteTask error:", error)
-    throw error // Re-throw for mutation error handling
+    throw error
   }
 }
 
