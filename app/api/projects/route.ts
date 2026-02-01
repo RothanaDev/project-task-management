@@ -29,13 +29,14 @@ export async function GET() {
             const db = getLocalData();
             return NextResponse.json(db.projects);
         }
-    } catch (error: any) {
+    } catch (error) {
         console.error("API Projects GET error:", error);
         try {
             const db = getLocalData();
             return NextResponse.json(db.projects);
-        } catch (e) {
-            return NextResponse.json({ error: error.message }, { status: 500 });
+        } catch (_e) {
+            const message = error instanceof Error ? error.message : "Unknown error";
+            return NextResponse.json({ error: message }, { status: 500 });
         }
     }
 }
@@ -59,7 +60,8 @@ export async function POST(request: Request) {
             fs.writeFileSync(dbPath, JSON.stringify(db, null, 2));
             return NextResponse.json(newProject, { status: 201 });
         }
-    } catch (error: any) {
-        return NextResponse.json({ error: error.message }, { status: 500 });
+    } catch (error) {
+        const message = error instanceof Error ? error.message : "Unknown error";
+        return NextResponse.json({ error: message }, { status: 500 });
     }
 }

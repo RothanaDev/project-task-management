@@ -9,7 +9,7 @@ import { Toaster } from "@/components/ui/sonner";
 export default function Layout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  const { data, isLoading: _isLoading, error } = useTasks();
+  const { data, error } = useTasks();
 
   if (error)
     return (

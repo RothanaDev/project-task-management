@@ -2,6 +2,7 @@ import { sql } from '@vercel/postgres';
 import { NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
+import { Task } from '@/lib/types';
 
 const dbPath = path.resolve(process.cwd(), 'db.json');
 
@@ -24,12 +25,13 @@ export async function GET(
             return NextResponse.json(rows[0]);
         } else {
             const db = getLocalData();
-            const task = db.tasks.find((t: any) => t.id === id);
+            const task = db.tasks.find((t: Task) => t.id === id);
             if (!task) return NextResponse.json({ error: "Task not found" }, { status: 404 });
             return NextResponse.json(task);
         }
-    } catch (error: any) {
-        return NextResponse.json({ error: error.message }, { status: 500 });
+    } catch (error) {
+        const message = error instanceof Error ? error.message : "Unknown error";
+        return NextResponse.json({ error: message }, { status: 500 });
     }
 }
 
@@ -62,14 +64,15 @@ export async function PUT(
             return NextResponse.json(rows[0]);
         } else {
             const db = getLocalData();
-            const index = db.tasks.findIndex((t: any) => t.id === id);
+            const index = db.tasks.findIndex((t: Task) => t.id === id);
             if (index === -1) return NextResponse.json({ error: "Task not found" }, { status: 404 });
             db.tasks[index] = { ...db.tasks[index], ...body };
             fs.writeFileSync(dbPath, JSON.stringify(db, null, 2));
             return NextResponse.json(db.tasks[index]);
         }
-    } catch (error: any) {
-        return NextResponse.json({ error: error.message }, { status: 500 });
+    } catch (error) {
+        const message = error instanceof Error ? error.message : "Unknown error";
+        return NextResponse.json({ error: message }, { status: 500 });
     }
 }
 
@@ -83,11 +86,12 @@ export async function DELETE(
             await sql`DELETE FROM tasks WHERE id = ${id};`;
         } else {
             const db = getLocalData();
-            db.tasks = db.tasks.filter((t: any) => t.id !== id);
+            db.tasks = db.tasks.filter((t: Task) => t.id !== id);
             fs.writeFileSync(dbPath, JSON.stringify(db, null, 2));
         }
         return NextResponse.json({ message: "Task deleted successfully" });
-    } catch (error: any) {
-        return NextResponse.json({ error: error.message }, { status: 500 });
+    } catch (error) {
+        const message = error instanceof Error ? error.message : "Unknown error";
+        return NextResponse.json({ error: message }, { status: 500 });
     }
 }

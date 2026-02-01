@@ -50,7 +50,7 @@ export default function ContentRendering({ id }: ChildrenProps) {
     name: "Subtask",
     url: "subtask",
   });
-  const { data, isLoading, error: _error } = useTask(id);
+  const { data, isLoading } = useTask(id);
   const { data: projects } = useProjects();
   const { handleDelete, isPending } = useHandleDeleteTask();
   const projectName = projects.find(

@@ -2,6 +2,7 @@ import { sql } from '@vercel/postgres';
 import { NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
+import { Project } from '@/lib/types';
 
 const dbPath = path.resolve(process.cwd(), 'db.json');
 
@@ -24,12 +25,13 @@ export async function GET(
             return NextResponse.json(rows[0]);
         } else {
             const db = getLocalData();
-            const project = db.projects.find((p: any) => p.id === id);
+            const project = db.projects.find((p: Project) => p.id === id);
             if (!project) return NextResponse.json({ error: "Project not found" }, { status: 404 });
             return NextResponse.json(project);
         }
-    } catch (error: any) {
-        return NextResponse.json({ error: error.message }, { status: 500 });
+    } catch (error) {
+        const message = error instanceof Error ? error.message : "Unknown error";
+        return NextResponse.json({ error: message }, { status: 500 });
     }
 }
 
@@ -60,14 +62,15 @@ export async function PUT(
             return NextResponse.json(rows[0]);
         } else {
             const db = getLocalData();
-            const index = db.projects.findIndex((p: any) => p.id === id);
+            const index = db.projects.findIndex((p: Project) => p.id === id);
             if (index === -1) return NextResponse.json({ error: "Project not found" }, { status: 404 });
             db.projects[index] = { ...db.projects[index], ...body };
             fs.writeFileSync(dbPath, JSON.stringify(db, null, 2));
             return NextResponse.json(db.projects[index]);
         }
-    } catch (error: any) {
-        return NextResponse.json({ error: error.message }, { status: 500 });
+    } catch (error) {
+        const message = error instanceof Error ? error.message : "Unknown error";
+        return NextResponse.json({ error: message }, { status: 500 });
     }
 }
 
@@ -81,11 +84,12 @@ export async function DELETE(
             await sql`DELETE FROM projects WHERE id = ${id};`;
         } else {
             const db = getLocalData();
-            db.projects = db.projects.filter((p: any) => p.id !== id);
+            db.projects = db.projects.filter((p: Project) => p.id !== id);
             fs.writeFileSync(dbPath, JSON.stringify(db, null, 2));
         }
         return NextResponse.json({ message: "Project deleted successfully" });
-    } catch (error: any) {
-        return NextResponse.json({ error: error.message }, { status: 500 });
+    } catch (error) {
+        const message = error instanceof Error ? error.message : "Unknown error";
+        return NextResponse.json({ error: message }, { status: 500 });
     }
 }

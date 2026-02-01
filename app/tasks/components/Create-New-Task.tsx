@@ -321,20 +321,22 @@ export default function CreateTaskPage() {
                 <div className="space-y-4">
                   <h3 className="text-lg font-semibold">Tags</h3>
                   <div className="flex flex-wrap gap-2">
-                    {presetTags.map((tag) => {
+                    {(() => {
                       const currentTags = form.watch("tags");
-                      const isSelected = currentTags.includes(tag.id);
-                      return (
-                        <Badge
-                          key={tag.id}
-                          variant={isSelected ? "default" : "outline"}
-                          className="cursor-pointer hover:opacity-80 transition-opacity"
-                          onClick={() => handleTagToggle(tag.id)}
-                        >
-                          {tag.label}
-                        </Badge>
-                      );
-                    })}
+                      return presetTags.map((tag) => {
+                        const isSelected = currentTags.includes(tag.id);
+                        return (
+                          <Badge
+                            key={tag.id}
+                            variant={isSelected ? "default" : "outline"}
+                            className="cursor-pointer hover:opacity-80 transition-opacity"
+                            onClick={() => handleTagToggle(tag.id)}
+                          >
+                            {tag.label}
+                          </Badge>
+                        );
+                      });
+                    })()}
                   </div>
                   <div className="text-sm text-gray-500">
                     Please Click tags to select

@@ -2,6 +2,7 @@ import { sql } from '@vercel/postgres';
 import { NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
+import { Task } from '@/lib/types';
 
 const dbPath = path.resolve(process.cwd(), 'db.json');
 
@@ -45,17 +46,18 @@ export async function GET(request: Request) {
             const db = getLocalData();
             let tasks = db.tasks;
             if (projectId) {
-                tasks = tasks.filter((t: any) => t.projectId === projectId);
+                tasks = tasks.filter((t: Task) => t.projectId === projectId);
             }
             return NextResponse.json(tasks);
         }
-    } catch (error: any) {
+    } catch (error) {
         console.error("API Tasks GET error:", error);
         try {
             const db = getLocalData();
             return NextResponse.json(db.tasks);
-        } catch (e) {
-            return NextResponse.json({ error: error.message }, { status: 500 });
+        } catch (_e) {
+            const message = error instanceof Error ? error.message : "Unknown error";
+            return NextResponse.json({ error: message }, { status: 500 });
         }
     }
 }
@@ -91,7 +93,8 @@ export async function POST(request: Request) {
             fs.writeFileSync(dbPath, JSON.stringify(db, null, 2));
             return NextResponse.json(newTask, { status: 201 });
         }
-    } catch (error: any) {
-        return NextResponse.json({ error: error.message }, { status: 500 });
+    } catch (error) {
+        const message = error instanceof Error ? error.message : "Unknown error";
+        return NextResponse.json({ error: message }, { status: 500 });
     }
 }

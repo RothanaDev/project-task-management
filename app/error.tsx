@@ -3,7 +3,7 @@ import { useEffect } from 'react'
 import { EmptyTable } from './tasks/components/Empty-Table';
 import { Ban } from 'lucide-react';
 
-export default function Error({ error, reset: _reset }: { error: Error; reset: () => void }) {
+export default function Error({ error }: { error: Error }) {
   useEffect(() => {
     console.error('Error caught in error boundary:', error)
   }, [error])
