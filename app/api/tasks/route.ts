@@ -68,24 +68,31 @@ export async function POST(request: Request) {
         const id = Math.random().toString(36).substr(2, 9);
 
         if (isPostgresConfigured) {
-            const { rows } = await sql`
-        INSERT INTO tasks (id, title, description, project_id, priority, status, due_date, tags, assignee, subtasks, comments)
-        VALUES (
-          ${id}, 
-          ${body.title}, 
-          ${body.description}, 
-          ${body.projectId}, 
-          ${body.priority}, 
-          ${body.status}, 
-          ${body.dueDate}, 
-          ${JSON.stringify(body.tags || [])}::jsonb, 
-          ${body.assignee || ''}, 
-          ${JSON.stringify(body.subtasks || [])}::jsonb, 
-          ${JSON.stringify(body.comments || [])}::jsonb
-        )
-        RETURNING id, title, description, project_id as "projectId", priority, status, due_date as "dueDate", tags, assignee, subtasks, comments;
-      `;
-            return NextResponse.json(rows[0], { status: 201 });
+            // Prepare JSONB fields as strings
+            const tagsJson = JSON.stringify(body.tags || []);
+            const subtasksJson = JSON.stringify(body.subtasks || []);
+            const commentsJson = JSON.stringify(body.comments || []);
+
+            // Use to_jsonb() to convert the JSON strings to JSONB type
+            const result = await sql.query(`
+                INSERT INTO tasks (id, title, description, project_id, priority, status, due_date, tags, assignee, subtasks, comments)
+                VALUES ($1, $2, $3, $4, $5, $6, $7, to_jsonb($8::json), $9, to_jsonb($10::json), to_jsonb($11::json))
+                RETURNING id, title, description, project_id as "projectId", priority, status, due_date as "dueDate", tags, assignee, subtasks, comments
+            `, [
+                id,
+                body.title,
+                body.description,
+                body.projectId,
+                body.priority,
+                body.status,
+                body.dueDate,
+                tagsJson,
+                body.assignee || '',
+                subtasksJson,
+                commentsJson
+            ]);
+
+            return NextResponse.json(result.rows[0], { status: 201 });
         } else {
             const db = getLocalData();
             const newTask = { ...body, id };
